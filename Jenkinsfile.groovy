@@ -27,7 +27,7 @@ pipeline {
                     sh "ls -la"
                     script {
                       lambdaExist = "aws lambda get-function --function-name order-flowers-lambda --region ${params.region}"
-                      updateLambda ="aws lambda create-function --function-name order-flowers-lambda --zip-file fileb://./OrderFlowers_Lambda.zip --region ${params.region}"
+                      updateLambda ="aws lambda update-function-code --function-name order-flowers-lambda --zip-file fileb://./OrderFlowers_Lambda.zip --region ${params.region}"
                       deployLambda = "aws lambda create-function --function-name order-flowers-lambda --zip-file fileb://./OrderFlowers_Lambda.zip --handler index.handler --region ${params.region} --runtime nodejs12.x --role arn:aws:iam::878955458484:role/lambda-ex"
                       deployLex = "aws lex-models start-import --payload fileb://./OrderFlowers_Export.zip --resource-type BOT --merge-strategy OVERWRITE_LATEST --region ${params.region}"
                       deployAccount = deploymentAccount

@@ -126,7 +126,7 @@ function validateOrders(flowerType, date, pickupTime) {
       return buildValidationResult(
         false,
         'PickupDate',
-        `You entered invalid date. What date would you like to pick up ${flower_type}`
+        `You entered invalid date. What date would you like to pick up ${flowerType}`
       );
     } else if (date <= new Date()) {
       return buildValidationResult(
@@ -177,11 +177,11 @@ function orderFlowers(intentRequest, callback) {
     if (!validationResult['isValid']) {
       slots[validationResult['validatedSlot']] = null;
       return elicitSlot(
-        intent_request['sessionAttributes'],
-        intent_request['currentIntent']['name'],
+        intentRequest['sessionAttributes'],
+        intentRequest['currentIntent']['name'],
         slots,
-        validation_result['violatedSlot'],
-        validation_result['message']
+        validationResult['violatedSlot'],
+        validationResult['message']
       );
     }
     const outputSessionAttributes = intentRequest['sessionAttributes']
