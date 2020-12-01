@@ -141,9 +141,9 @@ function validateOrders(flowerType, date, pickupTime) {
     if (pickupTime.length != 5) {
       return buildValidationResult(false, 'PickupTime', None);
     }
-    const [hour, min] = pickupTime.split(':');
-    const hour = parseInt(hour);
-    const min = parseInt(min);
+    const [hr, mn] = pickupTime.split(':');
+    const hour = parseInt(hr);
+    const min = parseInt(mn);
 
     if (isNaN(hour) || isNaN(min)) {
       return buildValidationResult(false, 'PickupTime', None);

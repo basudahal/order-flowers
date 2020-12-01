@@ -26,8 +26,9 @@ pipeline {
                     //sh "aws iam attach-role-policy --role-name lambda-ex --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
                     sh "ls -la"
                     script {
-                      lambdaExist = "aws lambda wait function-exists --function-name order-flowers-lambda --generate-cli-skeleton lambda"
-                      //deployLambda = "aws lambda create-function --function-name order-flowers-lambda --zip-file fileb://./OrderFlowers_Lambda.zip --handler index.handler --region ${params.region} --runtime nodejs12.x --role arn:aws:iam::878955458484:role/lambda-ex"
+                      lambdaExist = "aws lambda get-function --function-name order-flowers-lambda --region ${params.region}"
+                      updateLambda ="aws lambda create-function --function-name order-flowers-lambda --zip-file fileb://./OrderFlowers_Lambda.zip --region ${params.region}"
+                      deployLambda = "aws lambda create-function --function-name order-flowers-lambda --zip-file fileb://./OrderFlowers_Lambda.zip --handler index.handler --region ${params.region} --runtime nodejs12.x --role arn:aws:iam::878955458484:role/lambda-ex"
                       deployLex = "aws lex-models start-import --payload fileb://./OrderFlowers_Export.zip --resource-type BOT --merge-strategy OVERWRITE_LATEST --region ${params.region}"
                       deployAccount = deploymentAccount
                     }
@@ -50,6 +51,11 @@ pipeline {
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: '7583a985-3166-43a1-9340-a2622c4794a9']]) {
                         //sh deployLambda
                         sh lambdaExist
+                        if(0 == $?){
+                            sh updateLambda
+                        } else {
+                            sh deployLambda
+                        }
                     }
                 }
             }
