@@ -113,7 +113,10 @@ function getRandomInt(min, max) {
  */
 function validateOrders(flowerType, date, pickupTime) {
   const flowerTypes = ['lilies', 'roses', 'tulips'];
-  if (!flowerType && !flowerTypes.includes(flowerType.toLowerCase())) {
+  if (
+    !flowerType &&
+    !flowerTypes.includes((flowerType ? flowerType : '').toLowerCase())
+  ) {
     return buildValidationResult(
       false,
       'FlowerType',
