@@ -50,12 +50,7 @@ pipeline {
                 script {
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: '7583a985-3166-43a1-9340-a2622c4794a9']]) {
                         //sh deployLambda
-                        sh lambdaExist
-                        if(0 == $?){
-                            sh updateLambda
-                        } else {
-                            sh deployLambda
-                        }
+                        sh updateLambda
                     }
                 }
             }
