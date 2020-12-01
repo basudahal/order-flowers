@@ -20,17 +20,23 @@ pipeline {
                     //buildName "${params.dev_tag}-${params.environment}"
                     //BUILD_DISPLAY_NAME "${params.dev_tag}-${params.environment}-${params.region}"
                     sh "git checkout ${params.dev_tag}"
-                    sh "zip order-flowers.zip -r OrderFlowers_Export.json"
+                    sh "zip -r OrderFlowers_Export.zip OrderFlowers_Export.json"
+                    sh "ls -la"
                     script {
                       deployLambda = "serverless deploy"
-                      deployLex = "aws start-import --payload order-flowers.zip --resource-type BOT --merge-strategy OVERWRITE_LATEST"
+                      deployLex = "aws lex-models start-import --payload fileb://./OrderFlowers_Export.zip --resource-type BOT --merge-strategy OVERWRITE_LATEST --region us-east-1"
                       deployAccount = deploymentAccount
                     }
             }
         }
-        stage('Run NPM install') {
+        stage('Importing Lex bot') {
           steps {
-            sh "npm install"
+                script {
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: '7583a985-3166-43a1-9340-a2622c4794a9']]) {
+                        sh "ls -la"
+                        sh deployLex
+                    }
+                }
           }
         }
         stage('Deploy') {
@@ -38,7 +44,6 @@ pipeline {
                 script {
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: '7583a985-3166-43a1-9340-a2622c4794a9']]) {
                         sh deployLambda
-                        sh deployLex
                     }
                 }
             }
