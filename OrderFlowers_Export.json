@@ -19,9 +19,13 @@
           ]
         },
         "name": "OrderFlowers",
-        "version": "1",
+        "version": "2",
         "fulfillmentActivity": {
-          "type": "ReturnIntent"
+          "codeHook": {
+            "uri": "arn:aws:lambda:us-east-1:878955458484:function:order-flowers-lambda",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
         },
         "sampleUtterances": [
           "I would like to pick up flowers",
@@ -29,9 +33,7 @@
         ],
         "slots": [
           {
-            "sampleUtterances": [
-              "I would like to order {FlowerType}"
-            ],
+            "sampleUtterances": ["I would like to order {FlowerType}"],
             "slotType": "FlowerTypes",
             "slotTypeVersion": "1",
             "obfuscationSetting": "NONE",
@@ -50,6 +52,7 @@
             "description": "The type of flowers to pick up"
           },
           {
+            "sampleUtterances": [],
             "slotType": "AMAZON.DATE",
             "obfuscationSetting": "NONE",
             "slotConstraint": "Required",
@@ -71,6 +74,7 @@
             "description": "The date to pick up the flowers"
           },
           {
+            "sampleUtterances": [],
             "slotType": "AMAZON.TIME",
             "obfuscationSetting": "NONE",
             "slotConstraint": "Required",
@@ -104,6 +108,10 @@
             }
           ],
           "maxAttempts": 2
+        },
+        "dialogCodeHook": {
+          "uri": "arn:aws:lambda:us-east-1:878955458484:function:order-flowers-lambda",
+          "messageVersion": "1.0"
         }
       }
     ],
