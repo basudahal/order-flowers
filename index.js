@@ -108,6 +108,7 @@ function getRandomInt(min, max) {
  */
 function validateOrders(flowerType, date, pickupTime) {
   const flowerTypes = ['lilies', 'roses', 'tulips'];
+
   if (
     !flowerType &&
     !flowerTypes.includes(flowerType ? flowerType.toLowerCase() : '')
@@ -124,34 +125,41 @@ function validateOrders(flowerType, date, pickupTime) {
       return buildValidationResult(
         false,
         'PickupDate',
-        `You entered invalid date. What date would you like to pick up ${flowerType}`
+        'I did not understand that, what date works best for you?'
       );
-    } else if (date <= new Date()) {
+    }
+    if (parseLocalDate(date) <= new Date()) {
       return buildValidationResult(
         false,
         'PickupDate',
-        'You can pick up the flowers from tomorrow onwards.  What day would you like to pick them up?'
+        'Flower pickup must be scheduled a day in advance.  Can you try a different date?'
       );
     }
   }
 
   if (pickupTime) {
-    if (pickupTime.length != 5) {
-      return buildValidationResult(false, 'PickupTime', null);
-    }
-    const [hr, mn] = pickupTime.split(':');
-    const hour = parseInt(hr);
-    const min = parseInt(mn);
-
-    if (isNaN(hour) || isNaN(min)) {
-      return buildValidationResult(false, 'PickupTime', null);
-    }
-
-    if (hour < 10 || hour > 16) {
+    if (pickupTime.length !== 5) {
       return buildValidationResult(
         false,
         'PickupTime',
-        'Our business hours are from ten a m. to five p m. Can you specify a time during this range?'
+        'I did not recognize that, what time would you like to pickup flower?'
+      );
+    }
+    const hour = parseInt(pickupTime.substring(0, 2), 10);
+    const minute = parseInt(pickupTime.substring(3), 10);
+    if (isNaN(hour) || isNaN(minute)) {
+      return buildValidationResult(
+        false,
+        'PickupTime',
+        'I did not recognize that, what time would you like to pickup flowers?'
+      );
+    }
+    if (hour < 10 || hour > 16) {
+      // Outside of business hours
+      return buildValidationResult(
+        false,
+        'PickupTime',
+        'Our business hours are ten a.m. to five p.m.  What time works best for you?'
       );
     }
   }
@@ -168,29 +176,32 @@ function orderFlowers(intentRequest) {
   const date = intentRequest.currentIntent.slots.PickupDate;
   const pickupTime = intentRequest.currentIntent.slots.PickupTime;
   const source = intentRequest.invocationSource;
+  const outputSessionAttributes = intentRequest.sessionAttributes || {};
 
   if (source == 'DialogCodeHook') {
     const slots = intentRequest.currentIntent.slots;
     const validationResult = validateOrders(flowerType, date, pickupTime);
-    if (!validationResult['isValid']) {
-      slots[validationResult['validatedSlot']] = null;
+    if (!validationResult.isValid) {
+      slots[`${validationResult.validatedSlot}`] = null;
       return elicitSlot(
-        intentRequest['sessionAttributes'],
+        outputSessionAttributes,
         intentRequest.currentIntent.name,
         slots,
-        validationResult['violatedSlot'],
-        validationResult['message']
+        validationResult.violatedSlot,
+        validationResult.message
       );
     }
-    const outputSessionAttributes = intentRequest['sessionAttributes']
-      ? intentRequest['sessionAttributes']
+
+    const outputSessionAttributes = outputSessionAttributes
+      ? outputSessionAttributes
       : null;
-    if (!flowerType) {
+
+    if (flowerType) {
       outputSessionAttributes['Price'] = flowerType.length() * 5;
     }
-    return delegate(outputSessionAttributes, getSlots(intentRequest));
+    return delegate(outputSessionAttributes, intentRequest.currentIntent.slots);
   }
-  return close(intentRequest['sessionAttributes'], 'Fulfilled', {
+  return close(outputSessionAttributes, 'Fulfilled', {
     contentType: 'PlainText',
     content: `Thanks, your order for ${flowerType} has been placed and will be ready for pickup by ${pickupTime} on ${date}`,
   });
