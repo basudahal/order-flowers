@@ -1,9 +1,5 @@
 'use strict';
 
-function getSlots(intentRequest) {
-  return intentRequest['currentIntent']['slots'];
-}
-
 function elicitSlot(
   sessionAttributes,
   intentName,
@@ -12,46 +8,46 @@ function elicitSlot(
   message
 ) {
   return {
-    sessionAttributes: sessionAttributes,
+    sessionAttributes,
     dialogAction: {
       type: 'ElicitSlot',
-      intentName: intentName,
-      slots: slots,
-      slotToElicit: slotToElicit,
-      message: message,
+      intentName,
+      slots,
+      slotToElicit,
+      message,
     },
   };
 }
 
 function confirmIntent(sessionAttributes, intentName, slots, message) {
   return {
-    sessionAttributes: sessionAttributes,
+    sessionAttributes,
     dialogAction: {
       type: 'ConfirmIntent',
-      intentName: intentName,
-      slots: slots,
-      message: message,
+      intentName,
+      slots,
+      message,
     },
   };
 }
 
 function close(sessionAttributes, fulfillmentState, message) {
   return {
-    sessionAttributes: sessionAttributes,
+    sessionAttributes,
     dialogAction: {
       type: 'Close',
-      fulfillmentState: fulfillmentState,
-      message: message,
+      fulfillmentState,
+      message,
     },
   };
 }
 
 function delegate(sessionAttributes, slots) {
   return {
-    sessionAttributes: sessionAttributes,
+    sessionAttributes,
     dialogAction: {
       type: 'Delegate',
-      slots: slots,
+      slots,
     },
   };
 }
@@ -174,13 +170,13 @@ function orderFlowers(intentRequest) {
   const source = intentRequest.invocationSource;
 
   if (source == 'DialogCodeHook') {
-    const slots = getSlots(intentRequest);
+    const slots = intentRequest.currentIntent.slots;
     const validationResult = validateOrders(flowerType, date, pickupTime);
     if (!validationResult['isValid']) {
       slots[validationResult['validatedSlot']] = null;
       return elicitSlot(
         intentRequest['sessionAttributes'],
-        intentRequest['currentIntent']['name'],
+        intentRequest.currentIntent.name,
         slots,
         validationResult['violatedSlot'],
         validationResult['message']
