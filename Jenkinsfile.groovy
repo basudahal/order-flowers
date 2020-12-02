@@ -26,7 +26,7 @@ pipeline {
                     //sh "aws iam attach-role-policy --role-name lambda-ex --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
                     sh "ls -la"
                     script {
-                      currentBuild.displayName = ":::${params.dev_tag}:::${params.environment}:::${params.region}:::"
+                      currentBuild.displayName = "${params.dev_tag}:${params.environment}:${params.region}"
                       lambdaExist = "aws lambda get-function --function-name order-flowers-lambda --region ${params.region}"
                       updateLambda ="aws lambda update-function-code --function-name order-flowers-lambda --zip-file fileb://./OrderFlowers_Lambda.zip --region ${params.region}"
                       deployLambda = "aws lambda create-function --function-name order-flowers-lambda --zip-file fileb://./OrderFlowers_Lambda.zip --handler index.handler --region ${params.region} --runtime nodejs12.x --role arn:aws:iam::878955458484:role/lambda-ex"
