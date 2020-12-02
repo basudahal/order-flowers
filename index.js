@@ -42,7 +42,6 @@ function close(sessionAttributes, fulfillmentState, message) {
       type: 'Close',
       fulfillmentState,
       message,
-      responseCard,
     },
   };
 }
@@ -135,7 +134,7 @@ function validateOrders(flowerType, date, pickupTime) {
       return buildValidationResult(
         false,
         'PickupDate',
-        `You can pick up the flowers from tomorrow onwards.  What day would you like to pick them up?`
+        'You can pick up the flowers from tomorrow onwards.  What day would you like to pick them up?'
       );
     }
   }
@@ -224,7 +223,7 @@ function loggingCallback(response, originalCallback) {
 exports.handler = (event, context, callback) => {
   try {
     // By default, treat the user request as coming from the America/New_York time zone.
-    process.env.TZ = 'America/New_York';
+    process.env.TZ = 'America/Denver';
     console.log(`event.bot.name=${event.bot.name}`);
 
     /**
