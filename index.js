@@ -51,14 +51,14 @@ const delegate(sessionAttributes, slots) => {
 const buildValidationResult(isValid, violatedSlot, messageContent) => {
   if (!messageContent) {
     return {
-      isValid: isValid,
-      violatedSlot: violatedSlot,
+      'isValid': isValid,
+      'violatedSlot': violatedSlot,
     };
   }
   return {
-    isValid: isValid,
-    violatedSlot: violatedSlot,
-    message: { contentType: 'PlainText', content: messageContent },
+    'isValid': isValid,
+    'violatedSlot': violatedSlot,
+    'message': { contentType: 'PlainText', content: messageContent },
   };
 }
 
