@@ -114,7 +114,7 @@ function validateOrders(flowerType, date, pickupTime) {
   const flowerTypes = ['lilies', 'roses', 'tulips'];
   if (
     !flowerType &&
-    !flowerTypes.includes((flowerType ? flowerType : '').toLowerCase())
+    !flowerTypes.includes(flowerType ? flowerType.toLowerCase() : '')
   ) {
     return buildValidationResult(
       false,
@@ -162,16 +162,16 @@ function validateOrders(flowerType, date, pickupTime) {
   return buildValidationResult(true, null, null);
 }
 
-function orderFlowers(intentRequest, callback) {
+function orderFlowers(intentRequest) {
   /// --->
   /// Performs dialog management and fulfillment for ordering flowers.
   /// Beyond fulfillment, the implementation of this intent demonstrates the use of the elicitSlot dialog action
   /// in slot validation and re-prompting.
   ///<--
-  const flowerType = getSlots(intentRequest)['FlowerType'];
-  const date = getSlots(intentRequest)['PickupDate'];
-  const pickupTime = getSlots(intentRequest)['PickupTime'];
-  const source = intentRequest['invocationSource'];
+  const flowerType = intentRequest.currentIntent.slots.FlowerType;
+  const date = intentRequest.currentIntent.slots.PickupDate;
+  const pickupTime = intentRequest.currentIntent.slots.PickupTime;
+  const source = intentRequest.invocationSource;
 
   if (source == 'DialogCodeHook') {
     const slots = getSlots(intentRequest);
@@ -222,20 +222,7 @@ function loggingCallback(response, originalCallback) {
 
 exports.handler = (event, context, callback) => {
   try {
-    // By default, treat the user request as coming from the America/New_York time zone.
     process.env.TZ = 'America/Denver';
-    //console.log(`event.bot.name=${event.bot.name}`);
-
-    /**
-     * Uncomment this if statement and populate with your Lex bot name and / or version as
-     * a sanity check to prevent invoking this Lambda function from an undesired Lex bot or
-     * bot version.
-     */
-    /*
-      if (event.bot.name !== 'MakeAppointment') {
-           callback('Invalid Bot Name');
-      }
-      */
     dispatch(event, (response) => loggingCallback(response, callback));
   } catch (err) {
     callback(err);
