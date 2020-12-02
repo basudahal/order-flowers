@@ -12,46 +12,46 @@ function elicitSlot(
   message
 ) {
   return {
-    sessionAttributes,
+    sessionAttributes: sessionAttributes,
     dialogAction: {
       type: 'ElicitSlot',
-      intentName,
-      slots,
-      slotToElicit,
-      message,
+      intentName: intentName,
+      slots: slots,
+      slotToElicit: slotToElicit,
+      message: message,
     },
   };
 }
 
 function confirmIntent(sessionAttributes, intentName, slots, message) {
   return {
-    sessionAttributes,
+    sessionAttributes: sessionAttributes,
     dialogAction: {
       type: 'ConfirmIntent',
-      intentName,
-      slots,
-      message,
+      intentName: intentName,
+      slots: slots,
+      message: message,
     },
   };
 }
 
 function close(sessionAttributes, fulfillmentState, message) {
   return {
-    sessionAttributes,
+    sessionAttributes: sessionAttributes,
     dialogAction: {
       type: 'Close',
-      fulfillmentState,
-      message,
+      fulfillmentState: fulfillmentState,
+      message: message,
     },
   };
 }
 
 function delegate(sessionAttributes, slots) {
   return {
-    sessionAttributes,
+    sessionAttributes: sessionAttributes,
     dialogAction: {
       type: 'Delegate',
-      slots,
+      slots: slots,
     },
   };
 }
@@ -201,7 +201,7 @@ function orderFlowers(intentRequest, callback) {
 }
 
 function dispatch(intentRequest, callback) {
-  // console.log(JSON.stringify(intentRequest, null, 2));
+  console.log(JSON.stringify(intentRequest, null, 2));
   console.log(
     `dispatch userId=${intentRequest.userId}, intent=${intentRequest.currentIntent.name}`
   );
@@ -224,7 +224,7 @@ exports.handler = (event, context, callback) => {
   try {
     // By default, treat the user request as coming from the America/New_York time zone.
     process.env.TZ = 'America/Denver';
-    console.log(`event.bot.name=${event.bot.name}`);
+    //console.log(`event.bot.name=${event.bot.name}`);
 
     /**
      * Uncomment this if statement and populate with your Lex bot name and / or version as
