@@ -184,7 +184,7 @@ function orderFlowers(intentRequest) {
     if (!validationResult.isValid) {
       slots[`${validationResult.validatedSlot}`] = null;
       return elicitSlot(
-        outputSessionAttributes,
+        intentRequest.sessionAttributes,
         intentRequest.currentIntent.name,
         slots,
         validationResult.violatedSlot,
