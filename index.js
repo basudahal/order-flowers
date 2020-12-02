@@ -1,12 +1,6 @@
 'use strict';
 
-function elicitSlot(
-  sessionAttributes,
-  intentName,
-  slots,
-  slotToElicit,
-  message
-) {
+const elicitSlot(sessionAttributes, intentName, slots, slotToElicit, message) => {
   return {
     sessionAttributes,
     dialogAction: {
@@ -19,7 +13,7 @@ function elicitSlot(
   };
 }
 
-function confirmIntent(sessionAttributes, intentName, slots, message) {
+const confirmIntent(sessionAttributes, intentName, slots, message) => {
   return {
     sessionAttributes,
     dialogAction: {
@@ -31,7 +25,7 @@ function confirmIntent(sessionAttributes, intentName, slots, message) {
   };
 }
 
-function close(sessionAttributes, fulfillmentState, message) {
+const close(sessionAttributes, fulfillmentState, message) => {
   return {
     sessionAttributes,
     dialogAction: {
@@ -42,7 +36,7 @@ function close(sessionAttributes, fulfillmentState, message) {
   };
 }
 
-function delegate(sessionAttributes, slots) {
+const delegate(sessionAttributes, slots) => {
   return {
     sessionAttributes,
     dialogAction: {
@@ -54,7 +48,7 @@ function delegate(sessionAttributes, slots) {
 
 // Build a validation result
 
-function buildValidationResult(isValid, violatedSlot, messageContent) {
+const buildValidationResult(isValid, violatedSlot, messageContent) => {
   if (!messageContent) {
     return {
       isValid: isValid,
@@ -70,7 +64,7 @@ function buildValidationResult(isValid, violatedSlot, messageContent) {
 
 // ---------------- Helper Functions --------------------------------------------------
 
-function parseLocalDate(date) {
+const parseLocalDate(date) => {
   /**
    * Construct a date object in the local timezone by parsing the input date string, assuming a YYYY-MM-DD format.
    * Note that the Date(dateString) constructor is explicitly avoided as it may implicitly assume a UTC timezone.
@@ -79,7 +73,7 @@ function parseLocalDate(date) {
   return new Date(dateComponents[0], dateComponents[1] - 1, dateComponents[2]);
 }
 
-function isValidDate(date) {
+const isValidDate(date) => {
   try {
     return !isNaN(parseLocalDate(date).getTime());
   } catch (err) {
@@ -87,7 +81,7 @@ function isValidDate(date) {
   }
 }
 
-function incrementTimeByThirtyMins(time) {
+const incrementTimeByThirtyMins(time) => {
   if (time.length !== 5) {
     // Not a valid time
   }
@@ -97,7 +91,7 @@ function incrementTimeByThirtyMins(time) {
 }
 
 // Returns a random integer between min (included) and max (excluded)
-function getRandomInt(min, max) {
+const getRandomInt(min, max) => {
   const minInt = Math.ceil(min);
   const maxInt = Math.floor(max);
   return Math.floor(Math.random() * (maxInt - minInt)) + minInt;
@@ -106,7 +100,7 @@ function getRandomInt(min, max) {
 /**
  * Called when the user specifies an intent for this skill.
  */
-function validateOrders(flowerType, date, pickupTime) {
+const validateOrders(flowerType, date, pickupTime) => {
   const flowerTypes = ['lilies', 'roses', 'tulips'];
 
   if (
@@ -166,7 +160,7 @@ function validateOrders(flowerType, date, pickupTime) {
   return buildValidationResult(true, null, null);
 }
 
-function orderFlowers(intentRequest) {
+const orderFlowers(intentRequest) => {
   /// --->
   /// Performs dialog management and fulfillment for ordering flowers.
   /// Beyond fulfillment, the implementation of this intent demonstrates the use of the elicitSlot dialog action
@@ -207,7 +201,7 @@ function orderFlowers(intentRequest) {
   });
 }
 
-function dispatch(intentRequest, callback) {
+const dispatch(intentRequest, callback) => {
   console.log(JSON.stringify(intentRequest, null, 2));
   console.log(
     `dispatch userId=${intentRequest.userId}, intent=${intentRequest.currentIntent.name}`
@@ -222,15 +216,15 @@ function dispatch(intentRequest, callback) {
   throw new Error(`Intent with name ${name} not supported`);
 }
 
-function loggingCallback(response, originalCallback) {
+//const loggingCallback(response, originalCallback) => {
   // console.log(JSON.stringify(response, null, 2));
-  originalCallback(null, response);
-}
+  //originalCallback(null, response);
+//}
 
 exports.handler = (event, context, callback) => {
   try {
     process.env.TZ = 'America/Denver';
-    dispatch(event, (response) => loggingCallback(response, callback));
+    dispatch(event); //loggingCallback(response, callback));
   } catch (err) {
     callback(err);
   }
