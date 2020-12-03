@@ -227,7 +227,7 @@ function dispatch(intentRequest, callback) {
 //originalCallback(null, response);
 //}
 
-exports.handler = (event, context, callback) => {
+module.exports.handler = (event, callback) => {
   try {
     process.env.TZ = 'America/Denver';
     dispatch(event); //loggingCallback(response, callback));
