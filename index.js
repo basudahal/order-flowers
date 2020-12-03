@@ -1,6 +1,12 @@
 'use strict';
 
-const elicitSlot(sessionAttributes, intentName, slots, slotToElicit, message) => {
+function elicitSlot(
+  sessionAttributes,
+  intentName,
+  slots,
+  slotToElicit,
+  message
+) {
   return {
     sessionAttributes,
     dialogAction: {
@@ -13,7 +19,7 @@ const elicitSlot(sessionAttributes, intentName, slots, slotToElicit, message) =>
   };
 }
 
-const confirmIntent(sessionAttributes, intentName, slots, message) => {
+function confirmIntent(sessionAttributes, intentName, slots, message) {
   return {
     sessionAttributes,
     dialogAction: {
@@ -25,7 +31,7 @@ const confirmIntent(sessionAttributes, intentName, slots, message) => {
   };
 }
 
-const close(sessionAttributes, fulfillmentState, message) => {
+function close(sessionAttributes, fulfillmentState, message) {
   return {
     sessionAttributes,
     dialogAction: {
@@ -36,7 +42,7 @@ const close(sessionAttributes, fulfillmentState, message) => {
   };
 }
 
-const delegate(sessionAttributes, slots) => {
+function delegate(sessionAttributes, slots) {
   return {
     sessionAttributes,
     dialogAction: {
@@ -48,23 +54,23 @@ const delegate(sessionAttributes, slots) => {
 
 // Build a validation result
 
-const buildValidationResult(isValid, violatedSlot, messageContent) => {
+function buildValidationResult(isValid, violatedSlot, messageContent) {
   if (!messageContent) {
     return {
-      'isValid': isValid,
-      'violatedSlot': violatedSlot,
+      isValid: isValid,
+      violatedSlot: violatedSlot,
     };
   }
   return {
-    'isValid': isValid,
-    'violatedSlot': violatedSlot,
-    'message': { contentType: 'PlainText', content: messageContent },
+    isValid: isValid,
+    violatedSlot: violatedSlot,
+    message: { contentType: 'PlainText', content: messageContent },
   };
 }
 
 // ---------------- Helper Functions --------------------------------------------------
 
-const parseLocalDate(date) => {
+function parseLocalDate(date) {
   /**
    * Construct a date object in the local timezone by parsing the input date string, assuming a YYYY-MM-DD format.
    * Note that the Date(dateString) constructor is explicitly avoided as it may implicitly assume a UTC timezone.
@@ -73,7 +79,7 @@ const parseLocalDate(date) => {
   return new Date(dateComponents[0], dateComponents[1] - 1, dateComponents[2]);
 }
 
-const isValidDate(date) => {
+function isValidDate(date) {
   try {
     return !isNaN(parseLocalDate(date).getTime());
   } catch (err) {
@@ -81,7 +87,7 @@ const isValidDate(date) => {
   }
 }
 
-const incrementTimeByThirtyMins(time) => {
+function incrementTimeByThirtyMins(time) {
   if (time.length !== 5) {
     // Not a valid time
   }
@@ -91,7 +97,7 @@ const incrementTimeByThirtyMins(time) => {
 }
 
 // Returns a random integer between min (included) and max (excluded)
-const getRandomInt(min, max) => {
+function getRandomInt(min, max) {
   const minInt = Math.ceil(min);
   const maxInt = Math.floor(max);
   return Math.floor(Math.random() * (maxInt - minInt)) + minInt;
@@ -100,7 +106,7 @@ const getRandomInt(min, max) => {
 /**
  * Called when the user specifies an intent for this skill.
  */
-const validateOrders(flowerType, date, pickupTime) => {
+function validateOrders(flowerType, date, pickupTime) {
   const flowerTypes = ['lilies', 'roses', 'tulips'];
 
   if (
@@ -160,7 +166,7 @@ const validateOrders(flowerType, date, pickupTime) => {
   return buildValidationResult(true, null, null);
 }
 
-const orderFlowers(intentRequest) => {
+function orderFlowers(intentRequest) {
   /// --->
   /// Performs dialog management and fulfillment for ordering flowers.
   /// Beyond fulfillment, the implementation of this intent demonstrates the use of the elicitSlot dialog action
@@ -201,7 +207,7 @@ const orderFlowers(intentRequest) => {
   });
 }
 
-const dispatch(intentRequest, callback) => {
+function dispatch(intentRequest, callback) {
   console.log(JSON.stringify(intentRequest, null, 2));
   console.log(
     `dispatch userId=${intentRequest.userId}, intent=${intentRequest.currentIntent.name}`
@@ -216,9 +222,9 @@ const dispatch(intentRequest, callback) => {
   throw new Error(`Intent with name ${name} not supported`);
 }
 
-//const loggingCallback(response, originalCallback) => {
-  // console.log(JSON.stringify(response, null, 2));
-  //originalCallback(null, response);
+//const loggingCallback(response, originalCallback)   {
+// console.log(JSON.stringify(response, null, 2));
+//originalCallback(null, response);
 //}
 
 exports.handler = (event, context, callback) => {
