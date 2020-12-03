@@ -176,7 +176,7 @@ const orderFlowers = (intentRequest) => {
   const date = intentRequest.currentIntent.slots.PickupDate;
   const pickupTime = intentRequest.currentIntent.slots.PickupTime;
   const source = intentRequest.invocationSource;
-  const outputSessionAttributes = intentRequest.sessionAttributes || {};
+  //const outputSessionAttributes = intentRequest.sessionAttributes || {};
 
   if (source == 'DialogCodeHook') {
     const slots = intentRequest.currentIntent.slots;
@@ -192,9 +192,9 @@ const orderFlowers = (intentRequest) => {
       );
     }
 
-    //const outputSessionAttributes = outputSessionAttributes
-    //? outputSessionAttributes
-    //: null;
+    const outputSessionAttributes = intentRequest.sessionAttributes
+      ? intentRequest.sessionAttributes
+      : null;
 
     if (flowerType) {
       outputSessionAttributes['Price'] = flowerType.length() * 5;
