@@ -6,7 +6,7 @@
   },
   "resource": {
     "name": "OrderFlowers",
-    "version": "1",
+    "version": "4",
     "intents": [
       {
         "description": "Intent to order a bouquet of flowers for pick up",
@@ -19,7 +19,7 @@
           ]
         },
         "name": "OrderFlowers",
-        "version": "2",
+        "version": "11",
         "fulfillmentActivity": {
           "codeHook": {
             "uri": "arn:aws:lambda:us-east-1:878955458484:function:order-flowers-lambda",
@@ -33,7 +33,9 @@
         ],
         "slots": [
           {
-            "sampleUtterances": ["I would like to order {FlowerType}"],
+            "sampleUtterances": [
+              "I would like to order {FlowerType}"
+            ],
             "slotType": "FlowerTypes",
             "slotTypeVersion": "1",
             "obfuscationSetting": "NONE",
