@@ -192,9 +192,9 @@ function orderFlowers(intentRequest) {
       );
     }
 
-    const outputSessionAttributes = outputSessionAttributes
-      ? outputSessionAttributes
-      : null;
+    //const outputSessionAttributes = outputSessionAttributes
+    //? outputSessionAttributes
+    //: null;
 
     if (flowerType) {
       outputSessionAttributes['Price'] = flowerType.length() * 5;
